@@ -1,0 +1,5 @@
+import './Login.cy'
+import './AddAndDeleteEmployee.cy'
+import './AddAndDeleteJobTitle.cy'
+import './UpdateInfo.cy'
+import './Logout.cy'
