@@ -1,6 +1,36 @@
 
 it.only('AddAndDeleteJobTitle', function () {
     // Add job title
+    cy.get('.oxd-topbar-body-nav > ul > :nth-child(2)').should('be.visible').click()
+    cy.get('.oxd-dropdown-menu > :nth-child(1)').should('be.visible').click()
+    cy.get('.oxd-button').should('be.visible').click()
+    cy.get(':nth-child(2) > .oxd-input').should('be.visible').type('Tester 12345')
+    cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-textarea').should('be.visible').type('Testing job')
+    cy.get('[type="file"]').selectFile('cypress/attachments/TestingResume.pdf', { force: true })
+    cy.get(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-textarea').should('be.visible').type('Tester - QC')
+    cy.get('.oxd-button--secondary').should('be.visible').click()
+
+    // Assertion - Delete job title
+    cy.get('.oxd-table-body').should('be.visible').should('contain', 'Tester 12345').then(() => cy.log('Job title verified'));
+    // First, find the exact row containing the job title and scrollview
+    cy.contains('.oxd-table-row', 'Tester 12345')
+        .scrollIntoView({ duration: 300 })
+        .should('exist')
+        .within(() => {
+            // Checkbox click
+            cy.get(':nth-child(1) > .oxd-table-card-cell-checkbox .oxd-icon').click({ force: true });
+            // Click trashcan
+            cy.get(':nth-child(1) > .oxd-icon').should('be.visible').click({ force: true, multiple: true });
+        });
+    cy.get('.orangehrm-modal-footer > .oxd-button--label-danger').should('be.visible').click(); // Confirm deleting
+
+}
+)
+
+
+/* By using fixed waits, which should be avoided
+it.only('AddAndDeleteJobTitle', function () {
+    // Add job title
     cy.get('.oxd-topbar-body-nav > ul > :nth-child(2)').click()
     cy.wait(3000);
     cy.get('.oxd-dropdown-menu > :nth-child(1)').click()
@@ -39,3 +69,4 @@ it.only('AddAndDeleteJobTitle', function () {
 
 }
 )
+*/
